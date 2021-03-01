@@ -6,14 +6,26 @@ const errorElement = document.querySelector("#errors");
 let errors = [];
 
 form.addEventListener("submit", async event => {
-  event.preventDefault();
-  const formData = new FormData(form);
-  const article = Object.fromEntries(formData.entries());
-  if (formIsValid(article)) {
-    const json = JSON.stringify(article);
-    // Nous ferons la requête ici !
-  }
-});
+    event.preventDefault();
+    const formData = new FormData(form);
+    const article = Object.fromEntries(formData.entries());
+    if (formIsValid(article)) {
+      try {
+        const json = JSON.stringify(article);
+        const response = await fetch("https://restapi.fr/api/article", {
+          method: "POST",
+          body: json,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        const body = await response.json();
+        console.log(body);
+      } catch (e) {
+        console.error("e : ", e);
+      }
+    }
+  });
 
 
 const formIsValid = article => {
